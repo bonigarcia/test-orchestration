@@ -7,8 +7,8 @@ class orchestrator {
         this.@context.stage(jobId) { return buildJob(jobId) }
     }
 
-    def runJobDependingOn(String result, String job1Id, String job2Id) {
-        if (result == 'SUCCESS') {
+    def runJobDependingOn(boolean result, String job1Id, String job2Id) {
+        if (result) {
             return runJob(job1Id)
         }
         else {
@@ -26,17 +26,17 @@ class orchestrator {
                 stepsForParallel[stepName] = { -> buildParalleJob("${index}") }
             }
             this.@context.parallel stepsForParallel
-            return resultParallel
+            return this.resultParallel
         }
     }
 
     def buildParalleJob(String jobId) {
-        resultParallel &= buildJob(jobId)
+        this.resultParallel &= buildJob(jobId)
     }
 
     def buildJob(String jobId) {
         def job = this.@context.build job: jobId, propagate: false
-        return job.getResult()
+        return job.getResult() == 'SUCCESS'
     }
 
     def setContext(ctx){
