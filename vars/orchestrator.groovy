@@ -6,7 +6,7 @@ class orchestrator {
         this.@context.stage(jobId) { buildJob(jobId) }
     }
 
-    def runJobDependingOn(boolean result, String job1Id, String job2Id) {
+    def runJobDependingOn(String result, String job1Id, String job2Id) {
         if (result == 'SUCCESS') {
             buildJob(job1Id)
         }
