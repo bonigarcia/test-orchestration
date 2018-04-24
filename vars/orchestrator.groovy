@@ -7,10 +7,15 @@ class orchestrator {
     }
 
     def runJobsInParallel(String... jobs) {
-        this.@context.stage("Parallel jobs : " + jobs.join(", ")) {
+        this.@context.stage("Parallel jobs: " + jobs.join(", ")) {
+            def stepsForParallel = [:]
             for (job in jobs) {
-                buildJob(job)
+                def stepName = "Running ${job}"
+                stepsForParallel[stepName] = { ->
+                    buildJob(job)
+                }
             }
+            this.@context.parallel stepsForParallel
         }
     }
 
