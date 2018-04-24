@@ -62,7 +62,7 @@ class orchestrator {
         this.@context = ctx
     }
 
-    def setParallelResultStrategy(ctx){
-        this.@context = ctx
+    def setParallelResultStrategy(strategy){
+        this.parallelResultStrategy = strategy
     }
 }
