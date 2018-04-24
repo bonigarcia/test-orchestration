@@ -23,8 +23,7 @@ class orchestrator {
             def stepsForParallel = [:]
             for (job in jobs) {
                 def index = job
-                def stepName = "Running ${index}"
-                stepsForParallel[stepName] = { -> buildParalleJob("${index}") }
+                stepsForParallel["${index}"] = { -> buildParalleJob("${index}") }
             }
             this.@context.parallel stepsForParallel
             return this.resultParallel
