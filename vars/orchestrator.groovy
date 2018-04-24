@@ -8,15 +8,15 @@ class orchestrator {
 
     def runJobDependingOn(String result, String job1Id, String job2Id) {
         if (result == 'SUCCESS') {
-            buildJob(job1Id)
+            runJob(job1Id)
         }
         else {
-            buildJob(job2Id)
+            runJob(job2Id)
         }
     }
 
     def runJobsInParallel(String... jobs) {
-        this.@context.stage("Parallel jobs: " + jobs.join(", ")) {
+        this.@context.stage(jobs.join(", ")) {
             def stepsForParallel = [:]
             for (job in jobs) {
                 def index = job
