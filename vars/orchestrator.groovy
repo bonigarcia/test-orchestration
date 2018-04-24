@@ -4,8 +4,19 @@ class orchestrator {
 
     def runJob(String jobId) {
         this.@context.stage(jobId)
-            def job = this.@context.build job: jobId, propagate: false
-            return job.getResult()
+            buildJob(jobId)
+    }
+
+    def runJobsInParallel(String... jobs) {
+        this.@context.stage("Parallel")
+            for (job in jobs) {
+                buildJob(job)
+            }
+    }
+
+    def buildJob(String jobId) {
+        def job = this.@context.build job: jobId, propagate: false
+        return job.getResult()
     }
 
     def setContext(ctx){
