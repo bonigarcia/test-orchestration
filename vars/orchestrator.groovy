@@ -1,4 +1,4 @@
-class orchestrator implements Serializable {
+class orchestrator {
 
     def context
 
