@@ -6,6 +6,15 @@ class orchestrator {
         this.@context.stage(jobId) { buildJob(jobId) }
     }
 
+    def runJobDependingOn(boolean result, String job1Id, String job2Id) {
+        if (result == 'SUCCESS') {
+            buildJob(job1Id)
+        }
+        else {
+            buildJob(job2Id)
+        }
+    }
+
     def runJobsInParallel(String... jobs) {
         this.@context.stage("Parallel jobs: " + jobs.join(", ")) {
             def stepsForParallel = [:]
