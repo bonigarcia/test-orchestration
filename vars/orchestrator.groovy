@@ -1,7 +1,8 @@
 class orchestrator {
 
     def context
-    def resultParallel
+    boolean resultParallel
+    ParallelResultStrategy parallelResultStrategy = ParallelResultStrategy.AND
 
     def runJob(String jobId) {
         this.@context.stage(jobId) { return buildJob(jobId) }
@@ -17,7 +18,7 @@ class orchestrator {
     }
 
     def runJobsInParallel(String... jobs) {
-        this.resultParallel = true;
+        initResultParallel()
         this.@context.stage(jobs.join(", ")) {
             def stepsForParallel = [:]
             for (job in jobs) {
@@ -30,8 +31,26 @@ class orchestrator {
         }
     }
 
+    def initResultParallel() {
+        if (this.parallelResultStrategy == ParallelResultStrategy.AND) {
+            this.resultParallel = true
+        }
+        else if (this.parallelResultStrategy == ParallelResultStrategy.OR) {
+            this.resultParallel = false
+        }
+    }
+
+    def updateResultParallel(boolean result) {
+        if (this.parallelResultStrategy == ParallelResultStrategy.AND) {
+            this.resultParallel &= result
+        }
+        else if (this.parallelResultStrategy == ParallelResultStrategy.OR) {
+            this.resultParallel |= result
+        }
+    }
+
     def buildParalleJob(String jobId) {
-        this.resultParallel &= buildJob(jobId)
+        updateResultParallel(buildJob(jobId))
     }
 
     def buildJob(String jobId) {
@@ -40,6 +59,10 @@ class orchestrator {
     }
 
     def setContext(ctx){
+        this.@context = ctx
+    }
+
+    def setParallelResultStrategy(ctx){
         this.@context = ctx
     }
 }

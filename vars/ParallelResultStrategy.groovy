@@ -1,0 +1,4 @@
+enum ParallelResultStrategy {
+
+    AND, OR
+}
